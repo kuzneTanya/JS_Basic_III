@@ -27,12 +27,30 @@ let fruits = JSON.parse(fruitsJSON);
 
 // отрисовка карточек
 const display = () => {
-  // TODO: очищаем fruitsList от вложенных элементов,
-  // чтобы заполнить актуальными данными из fruits
+  fruitItems = document.querySelectorAll('.fruit__item');
+  fruitItems.forEach(item => {
+    fruitsList.removeChild(item); 
+  });
 
   for (let i = 0; i < fruits.length; i++) {
-    // TODO: формируем новый элемент <li> при помощи document.createElement,
-    // и добавляем в конец списка fruitsList при помощи document.appendChild
+    let fruit = document.createElement('li');
+    fruit.className = "fruit__item";
+    fruit.innerHTML = `<div class="fruit__info">
+                        <div>index: `+i+`</div>
+                        <div>kind: `+fruits[i].kind+`</div>
+                        <div>color: `+fruits[i].color+`</div>
+                        <div>weight (кг): `+fruits[i].weight+`</div>
+                       </div>`;
+    let color = () => {switch(fruits[i].color){
+      case "фиолетовый": return "violet"; break;
+      case "зеленый": return "green"; break;
+      case "розово-красный": return "carmazin"; break;
+      case "желтый": return "yellow"; break;
+      case "светло-коричневый": return "lightbrown"; break;
+      default: return "black";
+    }};
+    fruit.className += " fruit_"+color();
+    fruitsList.appendChild(fruit);
   }
 };
 
@@ -49,17 +67,13 @@ const getRandomInt = (min, max) => {
 // перемешивание массива
 const shuffleFruits = () => {
   let result = [];
-
-  // ATTENTION: сейчас при клике вы запустите бесконечный цикл и браузер зависнет
+  let oldFruits = fruits;
   while (fruits.length > 0) {
-    // TODO: допишите функцию перемешивания массива
-    //
-    // Подсказка: находим случайный элемент из fruits, используя getRandomInt
-    // вырезаем его из fruits и вставляем в result.
-    // ex.: [1, 2, 3], [] => [1, 3], [2] => [3], [2, 1] => [], [2, 1, 3]
-    // (массив fruits будет уменьшатся, а result заполняться)
+    i = getRandomInt(0, fruits.length-1);
+    result.push(fruits[i]);
+    fruits.splice(i, 1);
   }
-
+  if (oldFruits === result) alert("Порядок не изменился"); 
   fruits = result;
 };
 
