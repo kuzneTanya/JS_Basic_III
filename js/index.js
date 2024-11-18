@@ -67,13 +67,16 @@ const getRandomInt = (min, max) => {
 // перемешивание массива
 const shuffleFruits = () => {
   let result = [];
-  let oldFruits = fruits;
+  let oldFruits = [];
+  fruits.forEach(el => {
+    oldFruits.push(el);
+  });
   while (fruits.length > 0) {
     i = getRandomInt(0, fruits.length-1);
     result.push(fruits[i]);
     fruits.splice(i, 1);
   }
-  if (oldFruits === result) alert("Порядок не изменился"); 
+  // TODO: добавить alert в случае совпадения массивов
   fruits = result;
 };
 
@@ -86,13 +89,20 @@ shuffleButton.addEventListener('click', () => {
 
 // фильтрация массива
 const filterFruits = () => {
-  fruits.filter((item) => {
+    fruits = fruits.filter((item) => {
+    const weight = item.weight;
+    const minWeight = document.querySelector('.minweight__input').value;
+    const maxWeight = document.querySelector('.maxweight__input').value;
+    return weight >= minWeight && weight <= maxWeight;
     // TODO: допишите функцию
   });
+  return fruits;
 };
+
 
 filterButton.addEventListener('click', () => {
   filterFruits();
+  console.log(filterFruits());
   display();
 });
 
