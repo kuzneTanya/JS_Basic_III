@@ -2,6 +2,7 @@
 const fruitsList = document.querySelector('.fruits__list'); // список карточек
 const shuffleButton = document.querySelector('.shuffle__btn'); // кнопка перемешивания
 const filterButton = document.querySelector('.filter__btn'); // кнопка фильтрации
+const cancelButton = document.querySelector('.cancel__btn'); // кнопка сброса фильтрации
 const sortKindLabel = document.querySelector('.sort__kind'); // поле с названием сортировки
 const sortTimeLabel = document.querySelector('.sort__time'); // поле с временем сортировки
 const sortChangeButton = document.querySelector('.sort__change__btn'); // кнопка смены сортировки
@@ -68,15 +69,23 @@ const getRandomInt = (min, max) => {
 const shuffleFruits = () => {
   let result = [];
   let oldFruits = [];
+  let compareResult = [];
   fruits.forEach(el => {
     oldFruits.push(el);
   });
+  let i = 0;
   while (fruits.length > 0) {
     i = getRandomInt(0, fruits.length-1);
     result.push(fruits[i]);
     fruits.splice(i, 1);
-  }
-  // TODO: добавить alert в случае совпадения массивов
+  };
+  for(i = 0; i < result.length; i++) {
+    if (result[i].kind === oldFruits[i].kind) {
+      compareResult.push(true);
+    }
+    else compareResult.push(false);
+  };
+  if (compareResult.every((el) => el === true)) alert('Порядок не изменился');
   fruits = result;
 };
 
@@ -91,10 +100,9 @@ shuffleButton.addEventListener('click', () => {
 const filterFruits = () => {
     fruits = fruits.filter((item) => {
     const weight = item.weight;
-    const minWeight = document.querySelector('.minweight__input').value;
-    const maxWeight = document.querySelector('.maxweight__input').value;
+    let minWeight = document.querySelector('.minweight__input').value;
+    let maxWeight = document.querySelector('.maxweight__input').value;
     return weight >= minWeight && weight <= maxWeight;
-    // TODO: допишите функцию
   });
   return fruits;
 };
@@ -105,6 +113,11 @@ filterButton.addEventListener('click', () => {
   console.log(filterFruits());
   display();
 });
+
+cancelButton.addEventListener('click', () => {
+  fruits = JSON.parse(fruitsJSON);
+  display();
+})
 
 /*** СОРТИРОВКА ***/
 
