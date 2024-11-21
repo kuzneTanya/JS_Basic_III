@@ -134,15 +134,29 @@ const sortAPI = {
     for (let i = 0; i < n-1; i++) {
         for (let j = 0; j < n-1-i; j++) {
             if (comparation(arr[j], arr[j+1])) {
-               let temp = arr[j+1]; 
-               arr[j+1] = arr[j]; 
-               arr[j] = temp; 
+              [arr[j], arr[j+1]] = [arr[j+1], arr[j]]
             }
         }
     }
   },
 
   quickSort(arr, comparation) {
+    let left = 0,
+        right = arr.length - 1,
+        pivot = arr[Math.floor((left + right)/2)];
+        while (left <= right) {
+          while (comparation(pivot, arr[left])) {
+            left++;
+          }
+          while (comparation(arr[right], pivot)) {
+            right--;
+          }
+          if (left <= right) {
+            [arr[left], arr[right]] = [arr[right], arr[left]];
+            left++;
+            right--;
+          }
+        }       
     // TODO: допишите функцию быстрой сортировки
   },
 
@@ -160,6 +174,8 @@ sortKindLabel.textContent = sortKind;
 sortTimeLabel.textContent = sortTime;
 
 sortChangeButton.addEventListener('click', () => {
+  sortKind = sortKind === 'bubbleSort' ? 'quickSort' : 'bubbleSort';
+  sortKindLabel.textContent = sortKind;
   // TODO: переключать значение sortKind между 'bubbleSort' / 'quickSort'
 });
 
