@@ -37,10 +37,10 @@ const display = () => {
     let fruit = document.createElement('li');
     fruit.className = "fruit__item";
     fruit.innerHTML = `<div class="fruit__info">
-                        <div>index: `+i+`</div>
-                        <div>kind: `+fruits[i].kind+`</div>
-                        <div>color: `+fruits[i].color+`</div>
-                        <div>weight (кг): `+fruits[i].weight+`</div>
+                        <div>Номер: `+(i+1)+`</div>
+                        <div>Вид: `+fruits[i].kind+`</div>
+                        <div>Цвет: `+fruits[i].color+`</div>
+                        <div>Вес (кг): `+fruits[i].weight+`</div>
                        </div>`;
     let color = () => {switch(fruits[i].color){
       case "фиолетовый": return "violet"; break;
@@ -125,12 +125,21 @@ let sortKind = 'bubbleSort'; // инициализация состояния в
 let sortTime = '-'; // инициализация состояния времени сортировки
 
 const comparationColor = (a, b) => {
-  // TODO: допишите функцию сравнения двух элементов по цвету
+  return a.color[0] > b.color[0] ? true : false;
 };
 
 const sortAPI = {
   bubbleSort(arr, comparation) {
-    // TODO: допишите функцию сортировки пузырьком
+    const n = arr.length;
+    for (let i = 0; i < n-1; i++) {
+        for (let j = 0; j < n-1-i; j++) {
+            if (comparation(arr[j], arr[j+1])) {
+               let temp = arr[j+1]; 
+               arr[j+1] = arr[j]; 
+               arr[j] = temp; 
+            }
+        }
+    }
   },
 
   quickSort(arr, comparation) {
@@ -155,11 +164,11 @@ sortChangeButton.addEventListener('click', () => {
 });
 
 sortActionButton.addEventListener('click', () => {
-  // TODO: вывести в sortTimeLabel значение 'sorting...'
+  sortTimeLabel.textContent = 'sorting...';
   const sort = sortAPI[sortKind];
   sortAPI.startSort(sort, fruits, comparationColor);
   display();
-  // TODO: вывести в sortTimeLabel значение sortTime
+  sortTimeLabel.textContent = sortTime;
 });
 
 /*** ДОБАВИТЬ ФРУКТ ***/
