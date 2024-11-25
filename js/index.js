@@ -140,23 +140,35 @@ const sortAPI = {
     }
   },
 
-  quickSort(arr, comparation) {
-    let left = 0,
-        right = arr.length - 1,
-        pivot = arr[Math.floor((left + right)/2)];
-        while (left <= right) {
-          while (comparation(pivot, arr[left])) {
-            left++;
-          }
-          while (comparation(arr[right], pivot)) {
-            right--;
-          }
-          if (left <= right) {
-            [arr[left], arr[right]] = [arr[right], arr[left]];
-            left++;
-            right--;
-          }
-        }       
+  partition(arr, comparation, left, right, pivot) {
+    let l = left, r = right;
+      while (l <= r) {
+        while (comparation(pivot, arr[l])) {
+          l++;
+        }
+        while (comparation(arr[r], pivot)) {
+          r--;
+        }
+        if (l <= r) {
+          [arr[l], arr[r]] = [arr[r], arr[l]];
+          l++;
+          r--;
+        }
+      }
+      return l;
+  },
+
+  quickSort(arr, comparation, left = 0, right = arr.length - 1) {
+    if (arr.length <= 1) return arr; 
+    let pivot = arr[Math.floor((left + right)/2)];
+    index = sortAPI.partition(arr, comparation, left, right, pivot);
+    console.log('left = ' + left + ', right = ' + right + 'index = ' + index);
+    if (left < index - 1) {
+      sortAPI.quickSort(arr, comparation, left, index - 1);
+    }
+    if (index < right) {
+      sortAPI.quickSort(arr, comparation, index, right);
+    }
     // TODO: допишите функцию быстрой сортировки
   },
 
