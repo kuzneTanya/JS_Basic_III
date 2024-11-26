@@ -26,6 +26,15 @@ let fruits = JSON.parse(fruitsJSON);
 
 /*** ОТОБРАЖЕНИЕ ***/
 
+// генерация hex кода из строки
+function stringToHexColor(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return '#' + ((hash & 0xFFFFFF).toString(16).padStart(6, '0'));
+}
+
 // отрисовка карточек
 const display = () => {
   fruitItems = document.querySelectorAll('.fruit__item');
@@ -42,7 +51,8 @@ const display = () => {
                         <div>Цвет: `+fruits[i].color+`</div>
                         <div>Вес (кг): `+fruits[i].weight+`</div>
                        </div>`;
-    let color = () => {switch(fruits[i].color){
+    // выбор цвета в зависимости от названия
+    /*let color = () => {switch(fruits[i].color){
       case "фиолетовый": return "violet"; break;
       case "зеленый": return "green"; break;
       case "розово-красный": return "carmazin"; break;
@@ -50,7 +60,10 @@ const display = () => {
       case "светло-коричневый": return "lightbrown"; break;
       default: return "black";
     }};
-    fruit.className += " fruit_"+color();
+    fruit.className += " fruit_"+color();*/
+
+    // выбор цвета с помощью генерации hex кода из строки
+    fruit.style = 'border: 10px, solid, ' + stringToHexColor(fruits[i].color);
     fruitsList.appendChild(fruit);
   }
 };
@@ -140,18 +153,6 @@ const sortAPI = {
     }
   },
 
-  partition(arr, left, right, comparation){
-    let pivot = arr[Math.floor((left + right)/2)];
-    let l = left;
-    for (let i = left; i <= right; i++) {
-      if (comparation(pivot, arr[i])) {
-        [arr[i], arr[l]] = [arr[l], arr[i]];
-        l++;
-      }
-    }      
-    return l;   
-  },
-
   partition(arr, comparation, left, right, pivot) {
     let l = left, r = right;
       while (l <= r) {
@@ -181,7 +182,6 @@ const sortAPI = {
     if (index < right) {
       sortAPI.quickSort(arr, comparation, index, right);
     }
-    // TODO: допишите функцию быстрой сортировки
   },
 
   // выполняет сортировку и производит замер времени
@@ -200,7 +200,6 @@ sortTimeLabel.textContent = sortTime;
 sortChangeButton.addEventListener('click', () => {
   sortKind = sortKind === 'bubbleSort' ? 'quickSort' : 'bubbleSort';
   sortKindLabel.textContent = sortKind;
-  // TODO: переключать значение sortKind между 'bubbleSort' / 'quickSort'
 });
 
 sortActionButton.addEventListener('click', () => {
@@ -214,7 +213,8 @@ sortActionButton.addEventListener('click', () => {
 /*** ДОБАВИТЬ ФРУКТ ***/
 
 addActionButton.addEventListener('click', () => {
-  // TODO: создание и добавление нового фрукта в массив fruits
-  // необходимые значения берем из kindInput, colorInput, weightInput
-  display();
+  if (kindInput.value && colorInput.value && weightInput.value) {
+    fruits.push({"kind": kindInput.value, "color": colorInput.value, "weight": weightInput.value});
+    display();
+  } else alert('Введите все значения');  
 });
